@@ -1,0 +1,45 @@
+import throttle from 'lodash.throttle';
+
+const STORAGE_KEY = 'feedback-form-state';
+
+const formData = {};
+
+const form = document.querySelector('.feedback-form');
+
+form.addEventListener('submit', onFormSubmit);
+// refs.textarea.addEventListener('input', throttle(onTextareaInput, 500));
+
+form.addEventListener('input', throttle(onFormlInput, 500));
+
+populateTextarea();
+
+function onFormSubmit(evt) {
+    evt.preventDefault();
+
+    console.log('Отправили форму');
+    console.log(formData);
+    evt.currentTarget.reset();
+    localStorage.removeItem(STORAGE_KEY);
+
+}
+
+function onFormlInput(evt) {
+    formData[evt.target.name] = evt.target.value;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    
+}
+
+function populateTextarea() {
+    
+    const savedFields = localStorage.getItem(STORAGE_KEY);
+
+    if (savedFields) {
+        // console.log(localStorage.getItem(STORAGE_KEY, JSON.parse(savedFields)));
+        const parsedFields = JSON.parse(savedFields);
+        console.log(parsedFields);
+
+        form.email.value = parsedFields.email;
+        form.message.value = parsedFields.message;
+    }
+}
