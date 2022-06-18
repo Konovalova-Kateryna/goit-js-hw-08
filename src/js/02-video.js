@@ -9,10 +9,10 @@ console.log(startTime);
 
 player.on('timeupdate', throttle(onPause, 1000));
 
-function onPause({seconds}) {
+function onPause({ seconds }) {
     console.log(seconds);
     localStorage.setItem(STORAGE_TIME, seconds);
-    startTime = localStorage.getItem(STORAGE_TIME);
+    
 }
 
 player.setCurrentTime(startTime).then(function() {
