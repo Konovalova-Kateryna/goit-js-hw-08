@@ -1,16 +1,15 @@
-//  <iframe src="https://player.vimeo.com/video/76979871?h=8272103f6e"
-// width="640" height="360" frameborder="0" allowfullscreen allow="autoplay;
-//  encrypted-media"></iframe>
-
 import Player from '@vimeo/player';
+import throttle from 'lodash.throttle';
 
-    const iframe = document.querySelector('iframe');
-    const player = new Player(iframe);
+const iframe = document.querySelector('iframe');
+const player = new Player(iframe);
+const STORAGE_TIME = 'videoplayer-current-time'
+    
+player.on('timeupdate', throttle(onPause, 1000));
 
-    player.on('play', function() {
-        console.log('played the video!');
-    });
+function onPause({seconds}) {
+    console.log(seconds);
+    localStorage.setItem(STORAGE_TIME, seconds);
+}
+player.setCurrentTime(localStorage.getItem(STORAGE_TIME));
 
-    player.getVideoTitle().then(function(title) {
-        console.log('title:', title);
-    });
